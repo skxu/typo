@@ -77,10 +77,12 @@ class Article < Content
     
     merge_article.comments.each { |c|
 	  c.article_id = self.id
-	  c.save!
+	  
+	  c.save
+	  
 	}
     self.save!
-    merge_artile.reload
+    merge_article.reload
     merge_article.destroy
     self
   end  
