@@ -76,10 +76,8 @@ class Article < Content
     self.body += merge_article.body
     
     merge_article.comments.each { |c|
-	  c.article_id = self.id
-	  
-	  c.save
-	  
+	  c.article_id = self.id  
+	  c.save!
 	}
     self.save!
     merge_article.reload
