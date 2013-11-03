@@ -41,6 +41,12 @@ Given /^the blog is set up$/ do
                 :profile_id => 1,
                 :name => 'admin',
                 :state => 'active'})
+  User.create!({:login => 'user',
+				:password => 'aaaaaaaa',
+				:email => 'bob@snow.com',
+				:profile_id => 2,
+				:name => 'user',
+				:state => 'active'})
 end
 
 And /^I am logged into the admin panel$/ do
@@ -54,6 +60,72 @@ And /^I am logged into the admin panel$/ do
     assert page.has_content?('Login successful')
   end
 end
+
+And /^I log into the admin panel$/ do
+  visit '/accounts/logout'
+  visit '/accounts/login'
+  fill_in 'user_login', :with => 'admin'
+  fill_in 'user_password', :with => 'aaaaaaaa'
+  click_button 'Login'
+  if page.respond_to? :should
+    page.should have_content('Login successful')
+  else
+    assert page.has_content?('Login successful')
+  end
+end
+
+Given /^I am logged into the user panel$/ do
+  visit '/accounts/logout'
+  visit '/accounts/login'
+  fill_in 'user_login', :with => 'user'
+  fill_in 'user_password', :with => 'aaaaaaaa'
+  click_button 'Login'
+  if page.respond_to? :should
+    page.should have_content('Login successful')
+  else
+    assert page.has_content?('Login successful')
+  end
+end
+
+Then /^I should see "([^"]*)" button/ do |name|
+  find_button(name).should_not be_nil
+end
+
+Then /^(?:|I )should not see "([^"]*)" button$/ do |text|
+  if page.respond_to? :should
+    page.should have_no_content(text)
+  else
+    assert page.has_no_content?(text)
+  end
+end
+
+Then /^I should see one author$/ do
+  merged_article = Article.find_by_title "Foobar"
+  assert merged_article.author == "admin"
+end
+
+
+Then /^I should see merged comments$/ do
+  merged_article = Article.find_by_title "Foobar"
+  merged_article.comments.each {|comment|
+    assert comment.body == "COMMENT FOOB"
+  }
+end
+
+Then /^I should see one title$/ do
+  merged_article = Article.find_by_title "Foobar"
+  assert merged_article.title == "Foobar"
+  deleted_article = Article.find_by_title "Boofar"
+  assert deleted_article == nil
+end
+
+When /^I add comments$/ do
+  article = Article.find_by_title "Boofar"
+  article_comment = Comment.create!(:author => "admin", :body => "COMMENT FOOB", :article => article)
+  article.comments << article_comment
+  article.save!
+end
+
 
 # Single-line step scoper
 When /^(.*) within (.*[^:])$/ do |step, parent|

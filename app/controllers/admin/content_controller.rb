@@ -29,12 +29,24 @@ class Admin::ContentController < Admin::BaseController
 
   def edit
     @article = Article.find(params[:id])
+    @user_admin = current_user.admin?
     unless @article.access_by? current_user
       redirect_to :action => 'index'
       flash[:error] = _("Error, you are not allowed to perform this action")
       return
     end
     new_or_edit
+  end
+  
+  
+  def merge_with
+    @merge_article = Article.find_by_id(params[:id])
+    if @merge_article != nil && params[:id] != params[:merge_with]
+	  article = @merge_article.merge_with(params[:merge_with])
+	else
+	  flash[:error] = _("Invalid Article ID")
+	end
+    redirect_to :action => 'index'
   end
 
   def destroy
