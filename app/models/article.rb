@@ -74,7 +74,9 @@ class Article < Content
   def merge_with(article_id)
     merge_article = Article.find_by_id(article_id)
     self.body += merge_article.body
-    self.comments << merge_article.comments
+    merge_article.comments.each { |c|
+	  self.comments << c;
+	}
     self.save!
     merge_article.destroy
     self

@@ -18,19 +18,19 @@ Feature: Merge Articles
 	And I press "Publish"
 	Then I should be on the admin content page
 	
-	Scenario: A non-admin cannot merge articles
+	Scenario: A non-admin cannot merge two articles
 	  Given I am logged into the user panel
 	  When I go to the admin content page
 	  And I follow "Foobar"
 	  Then I should not see "Merge" button
 	  
-	Scenario: A admin can merge articles
+	Scenario: An admin can merge two articles
 	  Given I log into the admin panel
 	  When I go to the admin content page
 	  And I follow "Foobar"
 	  Then I should see "Merge" button
 	
-	Scenario: When articles are merged, the merged article should contain the text of both previous articles.
+	Scenario: When articles are merged, the merged article should contain the text of both previous articles
 	  Given I log into the admin panel
 	  When I go to the admin content page
 	  And I follow "Foobar"
@@ -40,7 +40,7 @@ Feature: Merge Articles
 	  Then I should see "Lorem Ipsum"
 	  And I should see "Bootleg foobarf"
 	  
-	Scenario: When articles are merged, the merged article should have one author (either one of the authors of the original article).
+	Scenario: When articles are merged, the merged article should have one author (either one of the authors of the original article)
 	  Given I log into the admin panel
 	  When I go to the admin content page
 	  And I follow "Foobar"
@@ -49,7 +49,7 @@ Feature: Merge Articles
 	  Then I should see one author
 	
 	
-	Scenario: Comments on each of the two original articles need to all carry over and point to the new, merged article.
+	Scenario: Comments on each of the two original articles need to all carry over and point to the new, merged article
 	  Given I log into the admin panel
 	  When I go to the admin content page
 	  And I follow "Foobar"
@@ -59,7 +59,7 @@ Feature: Merge Articles
 	  Then I should see merged comments
 	
 	
-	Scenario: The title of the new article should be the title from either one of the merged articles.
+	Scenario: The title of the new article should be the title from either one of the merged articles
 	  Given I log into the admin panel
 	  When I go to the admin content page
 	  And I follow "Foobar"
